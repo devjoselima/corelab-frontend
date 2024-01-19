@@ -3,7 +3,7 @@ import { SearchInput } from '../SearchInput'
 
 export const Header = () => {
     return (
-        <header className=" flex justify-between items-center py-5 px-6 shadow-headerShadow ring-offset-1 ring-gray-600">
+        <header className="bg-white flex justify-between items-center py-5 px-6 shadow-headerShadow ring-offset-1 ring-gray-600">
             <div className="flex items center gap-4 flex-col md:flex-row">
                 <Logo />
                 <SearchInput />

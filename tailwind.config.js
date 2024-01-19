@@ -7,6 +7,7 @@ export default {
             headerShadow: '1px 1px 10px 1px rgba(0, 0, 0, 0.25)',
         },
         colors: {
+            white: '#fff',
             gray400: '#455A64',
             gray100: '#D9D9D9',
             gray200: '#9E9E9E',
