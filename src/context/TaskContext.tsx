@@ -15,6 +15,8 @@ interface ITaskContextType {
         taskId: string,
         updatedTaskData: Partial<ITaskProps>
     ) => Promise<void>
+    searchValue: string
+    setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }
 
 const TaskContext = createContext({} as ITaskContextType)
@@ -25,6 +27,7 @@ interface TaskProviderProps {
 
 export function TaskProvider({ children }: TaskProviderProps) {
     const [tasks, setTasks] = useState<ITaskProps[]>([])
+    const [searchValue, setSearchValue] = useState('')
 
     async function getTask() {
         const response = await api.get('/tasks')
@@ -56,7 +59,9 @@ export function TaskProvider({ children }: TaskProviderProps) {
     }, [])
 
     return (
-        <TaskContext.Provider value={{ tasks, editTask }}>
+        <TaskContext.Provider
+            value={{ tasks, editTask, searchValue, setSearchValue }}
+        >
             {children}
         </TaskContext.Provider>
     )
