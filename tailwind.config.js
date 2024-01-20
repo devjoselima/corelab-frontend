@@ -27,6 +27,8 @@ export default {
             purple: '#ECA1FF',
             lime: '#DAFF8B',
             yellow: '#A99A7C',
+            success: '#2EA043',
+            red500: '#EF4444',
         },
         extend: {},
     },
