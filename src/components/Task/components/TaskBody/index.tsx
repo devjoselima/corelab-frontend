@@ -6,6 +6,7 @@ import TaskContext from '../../../../context/TaskContext'
 import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
+import { ColorPicker } from '../../../ColorPicker'
 
 interface TaskBodyProps {
     taskId: string
@@ -18,6 +19,7 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [editedDescription, setEditedDescription] = useState(description)
     const [originalDescription, setOriginalDescription] = useState(description)
+    const [isColorPickerOpen, setIsColorPickerOpen] = useState(false)
 
     const handleEditDescription = async () => {
         try {
@@ -45,6 +47,14 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const editingTask = () => {
         setIsEditing(true)
         toast.warning('Editando tarefa...')
+    }
+
+    const handleColorPickerToggle = () => {
+        setIsColorPickerOpen(!isColorPickerOpen)
+    }
+
+    const handleColorSelect = () => {
+        setIsColorPickerOpen(false)
     }
 
     return (
@@ -82,10 +92,16 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
                         className="cursor-pointer"
                         onClick={editingTask}
                     />
-                    <RiPaintFill
-                        size={20}
-                        className="text-orange400 cursor-pointer"
-                    />
+                    <div className="relative">
+                        <RiPaintFill
+                            size={20}
+                            className="text-orange400 cursor-pointer relative"
+                            onClick={handleColorPickerToggle}
+                        />
+                        {isColorPickerOpen && (
+                            <ColorPicker onSelectColor={handleColorSelect} />
+                        )}
+                    </div>
                 </div>
                 <IoMdClose
                     size={24}
