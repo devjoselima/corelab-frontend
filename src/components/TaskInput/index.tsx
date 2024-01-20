@@ -7,17 +7,22 @@ import { FaRegStar, FaStar } from 'react-icons/fa'
 
 export const TaskInput = () => {
     const { createTask } = useContext(TaskContext)
+
+    const [taskTitle, setTaskTitle] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
+
     const [isFavorited, setIsFavorited] = useState(false)
 
-    const handleAddTask = async (description: string) => {
-        if (description.length < 1) {
-            console.log('Esse campo nao pode ficar vazio')
-            toast.error('Preencha o campo!')
+    const handleAddTask = async (
+        title: string,
+        description: string,
+        isFavorited: boolean
+    ) => {
+        if (description.length < 1 || title.length < 1) {
+            toast.error('Preencha todos os campos!')
         } else {
-            const title = 'Teste'
             const color = 'blue'
-            const isFavorited = false
+            console.log(isFavorited)
             await createTask(title, description, color, isFavorited)
             toast.success('Tarefa criada com sucesso!')
         }
@@ -29,7 +34,12 @@ export const TaskInput = () => {
     return (
         <div className="md:w-[500px] bg-white mt-4 mb-5 w-80 mx-auto rounded-2xl">
             <div className="flex items-center py-3 px-4 justify-between border-b-2 border-b-gray100 w-full">
-                <h1 className="font-bold text-gray700">Título</h1>
+                <input
+                    type="text"
+                    placeholder="Digite aqui o titulo da tarefa"
+                    className="outline-none"
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                />
                 {isFavorited ? (
                     <FaStar
                         size={20}
@@ -54,7 +64,9 @@ export const TaskInput = () => {
             />
             <button
                 className="bg-success"
-                onClick={() => handleAddTask(taskDescription)}
+                onClick={() =>
+                    handleAddTask(taskTitle, taskDescription, isFavorited)
+                }
             >
                 Adicionar tarefa
             </button>
