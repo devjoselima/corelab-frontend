@@ -15,6 +15,7 @@ interface ITaskContextType {
         taskId: string,
         updatedTaskData: Partial<ITaskProps>
     ) => Promise<void>
+    deleteTask: (taskId: string) => Promise<void>
     searchValue: string
     setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }
@@ -54,13 +55,25 @@ export function TaskProvider({ children }: TaskProviderProps) {
         })
     }
 
+    async function deleteTask(taskId: string) {
+        try {
+            await api.delete(`/tasks/${taskId}`)
+
+            setTasks((prevTasks) =>
+                prevTasks.filter((task) => task.id !== taskId)
+            )
+        } catch (error) {
+            console.error('Error deleting task:', error)
+        }
+    }
+
     useEffect(() => {
         getTask()
     }, [])
 
     return (
         <TaskContext.Provider
-            value={{ tasks, editTask, searchValue, setSearchValue }}
+            value={{ tasks, editTask, deleteTask, searchValue, setSearchValue }}
         >
             {children}
         </TaskContext.Provider>

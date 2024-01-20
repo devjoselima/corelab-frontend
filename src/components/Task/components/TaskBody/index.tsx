@@ -10,7 +10,7 @@ interface TaskBodyProps {
 }
 
 export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
-    const { editTask } = useContext(TaskContext)
+    const { editTask, deleteTask } = useContext(TaskContext)
 
     const [isEditing, setIsEditing] = useState(false)
     const [editedDescription, setEditedDescription] = useState(description)
@@ -30,6 +30,10 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const handleCancelEdit = async () => {
         setEditedDescription(originalDescription)
         setIsEditing(false)
+    }
+
+    const handleDeleteTask = async () => {
+        await deleteTask(taskId)
     }
 
     return (
@@ -72,7 +76,11 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
                         className="text-orange400 cursor-pointer"
                     />
                 </div>
-                <IoMdClose size={24} className="text-gray800 cursor-pointer" />
+                <IoMdClose
+                    size={24}
+                    className="text-gray800 cursor-pointer"
+                    onClick={handleDeleteTask}
+                />
             </div>
         </>
     )
