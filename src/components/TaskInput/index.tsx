@@ -4,6 +4,8 @@ import { toast } from 'sonner'
 import TaskContext from '../../context/TaskContext'
 
 import { FaRegStar, FaStar } from 'react-icons/fa'
+import { RiPaintFill } from 'react-icons/ri'
+import { IoIosAdd } from 'react-icons/io'
 
 export const TaskInput = () => {
     const { createTask } = useContext(TaskContext)
@@ -32,8 +34,8 @@ export const TaskInput = () => {
         setIsFavorited((prevState) => !prevState)
     }
     return (
-        <div className="md:w-[500px] bg-white mt-4 mb-5 w-80 mx-auto rounded-2xl">
-            <div className="flex items-center py-3 px-4 justify-between border-b-2 border-b-gray100 w-full">
+        <div className="md:w-[500px] bg-white mt-4 mb-10 w-80 mx-auto rounded-2xl">
+            <div className="flex items-center py-5 px-4 justify-between border-b-2 border-b-gray100 w-full">
                 <input
                     type="text"
                     placeholder="Digite aqui o titulo da tarefa"
@@ -58,18 +60,26 @@ export const TaskInput = () => {
             <input
                 type="text "
                 placeholder="Criar nota..."
-                className="px-4 py-5 outline-none bg-transparent text-sm"
+                className="px-4 py-5 outline-none bg-transparent text-sm block"
                 onChange={(e) => setTaskDescription(e.target.value)}
                 required
             />
-            <button
-                className="bg-success"
-                onClick={() =>
-                    handleAddTask(taskTitle, taskDescription, isFavorited)
-                }
-            >
-                Adicionar tarefa
-            </button>
+
+            <div className="flex w-full justify-between p-2">
+                <RiPaintFill
+                    size={22}
+                    className="text-orange400 cursor-pointer"
+                />
+
+                <button
+                    className="bg-[#2ecc71] hover:bg-[#27ae60] text-white font-bold  text-sm rounded-full transition duration-300"
+                    onClick={() =>
+                        handleAddTask(taskTitle, taskDescription, isFavorited)
+                    }
+                >
+                    <IoIosAdd size={30} />
+                </button>
+            </div>
         </div>
     )
 }
