@@ -7,6 +7,7 @@ import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
 import { ColorPicker } from '../../../ColorPicker'
+import ColorContext from '../../../../context/ColorContext'
 
 interface TaskBodyProps {
     taskId: string
@@ -15,6 +16,7 @@ interface TaskBodyProps {
 
 export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const { editTask, deleteTask } = useContext(TaskContext)
+    const { selectedColor } = useContext(ColorContext)
 
     const [isEditing, setIsEditing] = useState(false)
     const [editedDescription, setEditedDescription] = useState(description)
@@ -44,6 +46,16 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
         await deleteTask(taskId)
     }
 
+    const handleChangeColor = async () => {
+        try {
+            await editTask(taskId, { color: selectedColor })
+
+            setIsColorPickerOpen(false)
+        } catch (error) {
+            console.error('Error edit task color:', error)
+        }
+    }
+
     const editingTask = () => {
         setIsEditing(true)
         toast.warning('Editando tarefa...')
@@ -51,10 +63,6 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
 
     const handleColorPickerToggle = () => {
         setIsColorPickerOpen(!isColorPickerOpen)
-    }
-
-    const handleColorSelect = () => {
-        setIsColorPickerOpen(false)
     }
 
     return (
@@ -95,11 +103,11 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
                     <div className="relative">
                         <RiPaintFill
                             size={20}
-                            className="text-orange400 cursor-pointer relative"
+                            className="text-orange400 cursor-pointer"
                             onClick={handleColorPickerToggle}
                         />
                         {isColorPickerOpen && (
-                            <ColorPicker onSelectColor={handleColorSelect} />
+                            <ColorPicker onSelectColor={handleChangeColor} />
                         )}
                     </div>
                 </div>

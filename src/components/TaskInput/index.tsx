@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import ColorContext from '../../context/ColorContext'
 import { toast } from 'sonner'
 
 import TaskContext from '../../context/TaskContext'
@@ -6,24 +7,27 @@ import TaskContext from '../../context/TaskContext'
 import { FaRegStar, FaStar } from 'react-icons/fa'
 import { RiPaintFill } from 'react-icons/ri'
 import { IoIosAdd } from 'react-icons/io'
+import { ColorPicker } from '../ColorPicker'
 
 export const TaskInput = () => {
     const { createTask } = useContext(TaskContext)
+    const { selectedColor } = useContext(ColorContext)
 
     const [taskTitle, setTaskTitle] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
+    const [isColorPickerOpen, setIsColorPickerOpen] = useState(false)
 
     const [isFavorited, setIsFavorited] = useState(false)
 
     const handleAddTask = async (
         title: string,
         description: string,
+        color: string,
         isFavorited: boolean
     ) => {
         if (description.length < 1 || title.length < 1) {
             toast.error('Preencha todos os campos!')
         } else {
-            const color = 'blue'
             console.log(isFavorited)
             await createTask(title, description, color, isFavorited)
             toast.success('Tarefa criada com sucesso!')
@@ -33,6 +37,11 @@ export const TaskInput = () => {
     const handleFavoriteTask = () => {
         setIsFavorited((prevState) => !prevState)
     }
+
+    const handleColorPickerToggle = () => {
+        setIsColorPickerOpen(!isColorPickerOpen)
+    }
+
     return (
         <div className="md:w-[500px] bg-white mt-4 mb-10 w-80 mx-auto rounded-2xl">
             <div className="flex items-center py-5 px-4 justify-between border-b-2 border-b-gray100 w-full">
@@ -66,15 +75,26 @@ export const TaskInput = () => {
             />
 
             <div className="flex w-full justify-between p-2">
-                <RiPaintFill
-                    size={22}
-                    className="text-orange400 cursor-pointer"
-                />
+                <div className="relative">
+                    <RiPaintFill
+                        size={22}
+                        className="text-orange400 cursor-pointer"
+                        onClick={handleColorPickerToggle}
+                    />
+                    {isColorPickerOpen && (
+                        <ColorPicker onSelectColor={handleColorPickerToggle} />
+                    )}
+                </div>
 
                 <button
                     className="bg-[#2ecc71] hover:bg-[#27ae60] text-white font-bold  text-sm rounded-full transition duration-300"
                     onClick={() =>
-                        handleAddTask(taskTitle, taskDescription, isFavorited)
+                        handleAddTask(
+                            taskTitle,
+                            taskDescription,
+                            selectedColor,
+                            isFavorited
+                        )
                     }
                 >
                     <IoIosAdd size={30} />
