@@ -2,12 +2,15 @@ import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
 
-export const TaskBody = () => {
+interface TaskBodyProps {
+    description: string
+}
+
+export const TaskBody = ({ description }: TaskBodyProps) => {
     return (
         <>
             <textarea
-                name=""
-                id=""
+                value={description}
                 className="h-[75%]  w-full resize-none outline-none p-3 text-gray700"
                 placeholder="Clique ou arraste o arquivo para esta área para fazer upload"
                 disabled={true}
