@@ -3,6 +3,7 @@ import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
 import TaskContext from '../../../../context/TaskContext'
+import { toast } from 'sonner'
 
 interface TaskBodyProps {
     taskId: string
@@ -14,13 +15,14 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
 
     const [isEditing, setIsEditing] = useState(false)
     const [editedDescription, setEditedDescription] = useState(description)
-    const [originalDescription] = useState(description)
+    const [originalDescription, setOriginalDescription] = useState(description)
 
     const handleEditDescription = async () => {
         try {
             setIsEditing(true)
             await editTask(taskId, { description: editedDescription })
 
+            setOriginalDescription(editedDescription)
             setIsEditing(false)
         } catch (error) {
             console.error('Error editing task description:', error)
@@ -30,10 +32,17 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const handleCancelEdit = async () => {
         setEditedDescription(originalDescription)
         setIsEditing(false)
+
+        toast.warning('Edição cancelada!')
     }
 
     const handleDeleteTask = async () => {
         await deleteTask(taskId)
+    }
+
+    const editingTask = () => {
+        setIsEditing(true)
+        toast.warning('Editando tarefa...')
     }
 
     return (
@@ -69,7 +78,7 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
                     <TfiPencil
                         size={20}
                         className="cursor-pointer"
-                        onClick={() => setIsEditing(true)}
+                        onClick={editingTask}
                     />
                     <RiPaintFill
                         size={20}

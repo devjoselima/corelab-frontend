@@ -5,14 +5,18 @@ import TaskContext, { ITaskProps } from '../../context/TaskContext'
 
 export const Task = () => {
     const { tasks, searchValue } = useContext(TaskContext)
-    const [filteredTasks, setFilteredTasks] = useState<ITaskProps[]>(tasks)
+    const [filteredTasks, setFilteredTasks] = useState<ITaskProps[]>([])
 
     useEffect(() => {
-        const filtered = tasks.filter((task) =>
-            task.title.toLowerCase().includes(searchValue.toLowerCase())
-        )
+        const fetchData = async () => {
+            const filtered = tasks.filter((task) =>
+                task.title.toLowerCase().includes(searchValue?.toLowerCase())
+            )
 
-        setFilteredTasks(filtered)
+            setFilteredTasks(filtered)
+        }
+
+        fetchData()
     }, [tasks, searchValue])
 
     return (

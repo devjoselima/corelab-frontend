@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { api } from '../services/api'
+import { toast } from 'sonner'
 
 export interface ITaskProps {
     id: string
@@ -11,6 +12,12 @@ export interface ITaskProps {
 
 interface ITaskContextType {
     tasks: ITaskProps[]
+    createTask: (
+        title: string,
+        description: string,
+        color: string,
+        isFavorited: boolean
+    ) => void
     editTask: (
         taskId: string,
         updatedTaskData: Partial<ITaskProps>
@@ -28,13 +35,35 @@ interface TaskProviderProps {
 
 export function TaskProvider({ children }: TaskProviderProps) {
     const [tasks, setTasks] = useState<ITaskProps[]>([])
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useState<string>('')
 
     async function getTask() {
         const response = await api.get('/tasks')
         const data = response.data
 
         setTasks(data.tasks)
+    }
+
+    async function createTask(
+        title: string,
+        description: string,
+        color: string,
+        isFavorited: boolean
+    ) {
+        const response = await api.post('/tasks', {
+            title,
+            description,
+            color,
+            isFavorited,
+        })
+        const createdTask = response.data
+
+        setTasks((prevTasks) => [...prevTasks, createdTask])
+
+        const updatedResponse = await api.get('/tasks')
+        const updatedData = updatedResponse.data
+
+        setTasks(updatedData.tasks)
     }
 
     async function editTask(
@@ -53,6 +82,8 @@ export function TaskProvider({ children }: TaskProviderProps) {
                 return task
             })
         })
+
+        toast.success('Tarefa editada com sucesso!')
     }
 
     async function deleteTask(taskId: string) {
@@ -62,6 +93,8 @@ export function TaskProvider({ children }: TaskProviderProps) {
             setTasks((prevTasks) =>
                 prevTasks.filter((task) => task.id !== taskId)
             )
+
+            toast.success('Tarefa removida com sucesso!')
         } catch (error) {
             console.error('Error deleting task:', error)
         }
@@ -73,7 +106,14 @@ export function TaskProvider({ children }: TaskProviderProps) {
 
     return (
         <TaskContext.Provider
-            value={{ tasks, editTask, deleteTask, searchValue, setSearchValue }}
+            value={{
+                tasks,
+                createTask,
+                editTask,
+                deleteTask,
+                searchValue,
+                setSearchValue,
+            }}
         >
             {children}
         </TaskContext.Provider>
