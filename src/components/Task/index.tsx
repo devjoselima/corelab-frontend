@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
+
+import TaskContext, { ITaskProps } from '../../context/TaskContext'
+
 import { TaskHeader } from './components/TaskHeader'
 import { TaskBody } from './components/TaskBody'
-import TaskContext, { ITaskProps } from '../../context/TaskContext'
 
 export const Task = () => {
     const { tasks, searchValue } = useContext(TaskContext)

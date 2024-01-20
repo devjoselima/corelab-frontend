@@ -1,7 +1,9 @@
 import { useContext, useState } from 'react'
-import { FaRegStar, FaStar } from 'react-icons/fa'
-import TaskContext from '../../context/TaskContext'
 import { toast } from 'sonner'
+
+import TaskContext from '../../context/TaskContext'
+
+import { FaRegStar, FaStar } from 'react-icons/fa'
 
 export const TaskInput = () => {
     const { createTask } = useContext(TaskContext)

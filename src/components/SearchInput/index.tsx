@@ -1,6 +1,8 @@
 import { useContext } from 'react'
-import { IoMdSearch } from 'react-icons/io'
+
 import TaskContext from '../../context/TaskContext'
+
+import { IoMdSearch } from 'react-icons/io'
 
 export const SearchInput = () => {
     const { searchValue, setSearchValue } = useContext(TaskContext)

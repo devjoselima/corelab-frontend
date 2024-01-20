@@ -1,7 +1,9 @@
 import { useContext, useState } from 'react'
-import { FaRegStar, FaStar } from 'react-icons/fa'
-import TaskContext from '../../../../context/TaskContext'
 import { toast } from 'sonner'
+
+import TaskContext from '../../../../context/TaskContext'
+
+import { FaRegStar, FaStar } from 'react-icons/fa'
 
 interface TaskHeaderProps {
     taskId: string
@@ -15,27 +17,19 @@ export const TaskHeader = ({ taskId, title }: TaskHeaderProps) => {
 
     const [isFavorited, setIsFavorited] = useState(task?.isFavorited)
 
+    const showToast = () => {
+        if (isFavorited) {
+            toast.warning('Tarefa desfavoritada!')
+        } else {
+            toast.success('Tarefa favoritada!')
+        }
+    }
+
     const handleFavoriteTask = async () => {
         await editTask(taskId, { isFavorited: !isFavorited })
         setIsFavorited((prevIsFavorited) => !prevIsFavorited)
 
-        if (isFavorited) {
-            toast.warning('Tarefa desfavoritada!', {
-                action: {
-                    label: 'Desfazer',
-                    onClick: () =>
-                        setIsFavorited((prevIsFavorited) => !prevIsFavorited),
-                },
-            })
-        } else {
-            toast.success('Tarefa favoritada!', {
-                action: {
-                    label: 'Desfazer',
-                    onClick: () =>
-                        setIsFavorited((prevIsFavorited) => !prevIsFavorited),
-                },
-            })
-        }
+        showToast()
     }
     return (
         <div className="flex items-center py-3 px-4 justify-between border-b-2 border-b-gray100 w-full">

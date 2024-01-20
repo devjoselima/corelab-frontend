@@ -1,9 +1,11 @@
 import { useContext, useState } from 'react'
+import { toast } from 'sonner'
+
+import TaskContext from '../../../../context/TaskContext'
+
 import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
-import TaskContext from '../../../../context/TaskContext'
-import { toast } from 'sonner'
 
 interface TaskBodyProps {
     taskId: string

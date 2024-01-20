@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
-import { IoMdClose } from 'react-icons/io'
-
 import { Logo } from '../Logo'
+
 import { SearchInput } from '../SearchInput'
+
+import { IoMdClose } from 'react-icons/io'
 import { FaArrowDown } from 'react-icons/fa6'
 
 export const Header = () => {
