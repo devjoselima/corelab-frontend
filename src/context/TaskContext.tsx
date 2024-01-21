@@ -83,7 +83,9 @@ export function TaskProvider({ children }: TaskProviderProps) {
             })
         })
 
-        toast.success('Tarefa editada com sucesso!')
+        const updatedResponse = await api.get('/tasks')
+        const updatedData = updatedResponse.data
+        setTasks(updatedData.tasks)
     }
 
     async function deleteTask(taskId: string) {

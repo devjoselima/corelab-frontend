@@ -28,7 +28,6 @@ export const TaskInput = () => {
         if (description.length < 1 || title.length < 1) {
             toast.error('Preencha todos os campos!')
         } else {
-            console.log(isFavorited)
             await createTask(title, description, color, isFavorited)
             toast.success('Tarefa criada com sucesso!')
         }
@@ -69,7 +68,7 @@ export const TaskInput = () => {
             <input
                 type="text "
                 placeholder="Criar nota..."
-                className="px-4 py-5 outline-none bg-transparent text-sm block"
+                className="px-4 py-5 w-full outline-none bg-transparent text-sm block"
                 onChange={(e) => setTaskDescription(e.target.value)}
                 required
             />
@@ -82,7 +81,10 @@ export const TaskInput = () => {
                         onClick={handleColorPickerToggle}
                     />
                     {isColorPickerOpen && (
-                        <ColorPicker onSelectColor={handleColorPickerToggle} />
+                        <ColorPicker
+                            taskId="3f445a9f-25e4-456c-a793-9c29e830eee0"
+                            closeMenu={handleColorPickerToggle}
+                        />
                     )}
                 </div>
 

@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useState } from 'react'
+import { colors } from '../utils/colors'
 
 interface ColorContextProps {
     selectedColor: string
@@ -11,7 +12,7 @@ interface ColorProviderProps {
     children: ReactNode
 }
 export const ColorProvider = ({ children }: ColorProviderProps) => {
-    const [selectedColor, setSelectedColor] = useState('#fff')
+    const [selectedColor, setSelectedColor] = useState(colors[0])
 
     const updateColor = (newColor: string) => {
         setSelectedColor(newColor)

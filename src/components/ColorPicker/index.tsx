@@ -2,17 +2,26 @@ import { useContext } from 'react'
 import ColorContext from '../../context/ColorContext'
 
 import { colors } from '../../utils/colors'
+import TaskContext from '../../context/TaskContext'
+import { toast } from 'sonner'
 
 interface ColorPickerProps {
-    onSelectColor: () => void
+    taskId: string
+    closeMenu: () => void
 }
 
-export const ColorPicker = ({ onSelectColor }: ColorPickerProps) => {
+export const ColorPicker = ({ taskId, closeMenu }: ColorPickerProps) => {
+    const { editTask } = useContext(TaskContext)
     const { updateColor } = useContext(ColorContext)
 
-    const changeColor = (color: string) => {
-        updateColor(color)
-        onSelectColor()
+    const editColor = async (taskId: string, newColor: string) => {
+        try {
+            updateColor(newColor)
+            await editTask(taskId, { color: newColor })
+            toast.success('Cor alterada!')
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -23,7 +32,8 @@ export const ColorPicker = ({ onSelectColor }: ColorPickerProps) => {
                     className="w-6 h-6 rounded-full cursor-pointer"
                     style={{ backgroundColor: currentColor }}
                     onClick={() => {
-                        changeColor(currentColor)
+                        editColor(taskId, currentColor)
+                        closeMenu()
                     }}
                 />
             ))}

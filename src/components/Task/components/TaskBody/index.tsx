@@ -2,12 +2,11 @@ import { useContext, useState } from 'react'
 import { toast } from 'sonner'
 
 import TaskContext from '../../../../context/TaskContext'
+import { ColorPicker } from '../../../ColorPicker'
 
 import { IoMdClose } from 'react-icons/io'
 import { RiPaintFill } from 'react-icons/ri'
 import { TfiPencil } from 'react-icons/tfi'
-import { ColorPicker } from '../../../ColorPicker'
-import ColorContext from '../../../../context/ColorContext'
 
 interface TaskBodyProps {
     taskId: string
@@ -16,12 +15,11 @@ interface TaskBodyProps {
 
 export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
     const { editTask, deleteTask } = useContext(TaskContext)
-    const { selectedColor } = useContext(ColorContext)
 
     const [isEditing, setIsEditing] = useState(false)
+    const [isColorPickerOpen, setIsColorPickerOpen] = useState(false)
     const [editedDescription, setEditedDescription] = useState(description)
     const [originalDescription, setOriginalDescription] = useState(description)
-    const [isColorPickerOpen, setIsColorPickerOpen] = useState(false)
 
     const handleEditDescription = async () => {
         try {
@@ -30,6 +28,8 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
 
             setOriginalDescription(editedDescription)
             setIsEditing(false)
+
+            toast.success('Tarefa editada com sucesso!')
         } catch (error) {
             console.error('Error editing task description:', error)
         }
@@ -46,16 +46,6 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
         await deleteTask(taskId)
     }
 
-    const handleChangeColor = async () => {
-        try {
-            await editTask(taskId, { color: selectedColor })
-
-            setIsColorPickerOpen(false)
-        } catch (error) {
-            console.error('Error edit task color:', error)
-        }
-    }
-
     const editingTask = () => {
         setIsEditing(true)
         toast.warning('Editando tarefa...')
@@ -70,7 +60,7 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
             <textarea
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
-                className="h-[70%]  w-full resize-none outline-none p-3 text-gray700"
+                className="h-[70%] w-full resize-none outline-none p-3 text-gray700"
                 placeholder="Clique ou arraste o arquivo para esta área para fazer upload"
                 disabled={!isEditing}
                 onClick={() => setIsEditing(true)}
@@ -107,7 +97,10 @@ export const TaskBody = ({ taskId, description }: TaskBodyProps) => {
                             onClick={handleColorPickerToggle}
                         />
                         {isColorPickerOpen && (
-                            <ColorPicker onSelectColor={handleChangeColor} />
+                            <ColorPicker
+                                taskId={taskId}
+                                closeMenu={handleColorPickerToggle}
+                            />
                         )}
                     </div>
                 </div>
