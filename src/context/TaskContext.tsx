@@ -12,6 +12,7 @@ export interface ITaskProps {
 
 interface ITaskContextType {
     tasks: ITaskProps[]
+
     createTask: (
         title: string,
         description: string,
@@ -35,6 +36,7 @@ interface TaskProviderProps {
 
 export function TaskProvider({ children }: TaskProviderProps) {
     const [tasks, setTasks] = useState<ITaskProps[]>([])
+
     const [searchValue, setSearchValue] = useState<string>('')
 
     async function getTask() {
@@ -110,6 +112,7 @@ export function TaskProvider({ children }: TaskProviderProps) {
         <TaskContext.Provider
             value={{
                 tasks,
+
                 createTask,
                 editTask,
                 deleteTask,

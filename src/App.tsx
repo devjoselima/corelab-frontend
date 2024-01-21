@@ -1,6 +1,7 @@
 import { Header } from './components/Header'
+import { Task } from './components/Task'
 import { TaskInput } from './components/TaskInput'
-import { TaskList } from './components/TaskList'
+
 import { ColorProvider } from './context/ColorContext'
 import { TaskProvider } from './context/TaskContext'
 
@@ -14,7 +15,7 @@ function App() {
                 <Header />
                 <TaskInput />
                 <div className="md:container mx-auto">
-                    <TaskList />
+                    <Task />
                 </div>
             </ColorProvider>
         </TaskProvider>
