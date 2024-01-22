@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useEffect, useState } from 'react'
 import { api } from '../services/api'
 import { toast } from 'sonner'
 
@@ -12,6 +12,8 @@ export interface ITaskProps {
 
 interface ITaskContextType {
     tasks: ITaskProps[]
+    filteredTask: ITaskProps[]
+
     createTask: (
         title: string,
         description: string,
@@ -23,8 +25,8 @@ interface ITaskContextType {
         updatedTaskData: Partial<ITaskProps>
     ) => Promise<void>
     deleteTask: (taskId: string) => Promise<void>
-    searchValue: string
-    setSearchValue: React.Dispatch<React.SetStateAction<string>>
+    setFilteredTask: React.Dispatch<React.SetStateAction<ITaskProps[]>>
+    searchTask: (searchValue: string) => void
 }
 
 const TaskContext = createContext({} as ITaskContextType)
@@ -36,7 +38,14 @@ interface TaskProviderProps {
 export function TaskProvider({ children }: TaskProviderProps) {
     const [tasks, setTasks] = useState<ITaskProps[]>([])
 
-    const [searchValue, setSearchValue] = useState<string>('')
+    const [filteredTask, setFilteredTask] = useState<ITaskProps[]>([])
+
+    async function getTask() {
+        const response = await api.get('/tasks')
+        const data = response.data
+
+        setTasks(data.tasks)
+    }
 
     async function createTask(
         title: string,
@@ -101,15 +110,36 @@ export function TaskProvider({ children }: TaskProviderProps) {
         }
     }
 
+    async function searchTask(searchValue: string) {
+        const taskFiltered = tasks.filter((task) =>
+            task.title.toLowerCase().includes(searchValue.toLowerCase())
+        )
+
+        await setFilteredTask(taskFiltered)
+
+        if (taskFiltered.length === 0) {
+            toast.error('Nenhuma tarefa encontrada!')
+        } else {
+            toast.success(`${taskFiltered.length} tarefa(s) encontrada(s)`)
+        }
+    }
+
+    useEffect(() => {
+        getTask()
+    }, [])
+
     return (
         <TaskContext.Provider
             value={{
                 tasks,
+
+                filteredTask,
                 createTask,
                 editTask,
                 deleteTask,
-                searchValue,
-                setSearchValue,
+
+                setFilteredTask,
+                searchTask,
             }}
         >
             {children}

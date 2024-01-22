@@ -1,23 +1,27 @@
-import { ChangeEvent, useContext } from 'react'
+import { ChangeEvent, useContext, useState } from 'react'
 
 import TaskContext from '../../context/TaskContext'
 
 import { IoMdSearch } from 'react-icons/io'
+import { GrPowerReset } from 'react-icons/gr'
 
 export const SearchInput = () => {
-    const { searchValue, setSearchValue } = useContext(TaskContext)
+    const { searchTask, setFilteredTask } = useContext(TaskContext)
 
-    const handleSearchTask = () => {
-        setSearchValue(searchValue)
-
-        console.log(searchValue)
-
-        setSearchValue('')
-    }
+    const [searchValue, setSearchValue] = useState<string>('')
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        // Atualiza o valor de pesquisa sempre que o conteúdo do input muda
         setSearchValue(event.target.value)
+    }
+
+    const handleSearchTask = () => {
+        searchTask(searchValue)
+    }
+
+    const handleResetFields = () => {
+        setFilteredTask([])
+
+        setSearchValue('')
     }
 
     return (
@@ -30,9 +34,15 @@ export const SearchInput = () => {
                 onChange={handleChange}
             />
 
-            <button className="relative right-7" onClick={handleSearchTask}>
-                <IoMdSearch size={22} className="text-gray200" />
-            </button>
+            <div className="flex items-center gap-2 relative right-14">
+                <button onClick={handleSearchTask}>
+                    <IoMdSearch size={22} className="text-gray200" />
+                </button>
+
+                <button onClick={handleResetFields}>
+                    <GrPowerReset size={18} className=" text-gray200" />
+                </button>
+            </div>
         </div>
     )
 }

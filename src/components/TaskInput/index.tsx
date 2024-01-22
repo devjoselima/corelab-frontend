@@ -29,6 +29,7 @@ export const TaskInput = () => {
             toast.error('Preencha todos os campos!')
         } else {
             await createTask(title, description, color, isFavorited)
+
             toast.success('Tarefa criada com sucesso!')
         }
     }
