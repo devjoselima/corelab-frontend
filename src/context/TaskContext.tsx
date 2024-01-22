@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from 'react'
+import { ReactNode, createContext, useState } from 'react'
 import { api } from '../services/api'
 import { toast } from 'sonner'
 
@@ -12,7 +12,6 @@ export interface ITaskProps {
 
 interface ITaskContextType {
     tasks: ITaskProps[]
-
     createTask: (
         title: string,
         description: string,
@@ -39,33 +38,31 @@ export function TaskProvider({ children }: TaskProviderProps) {
 
     const [searchValue, setSearchValue] = useState<string>('')
 
-    async function getTask() {
-        const response = await api.get('/tasks')
-        const data = response.data
-
-        setTasks(data.tasks)
-    }
-
     async function createTask(
         title: string,
         description: string,
         color: string,
         isFavorited: boolean
     ) {
-        const response = await api.post('/tasks', {
-            title,
-            description,
-            color,
-            isFavorited,
-        })
-        const createdTask = response.data
+        try {
+            const response = await api.post('/tasks', {
+                title,
+                description,
+                color,
+                isFavorited,
+            })
 
-        setTasks((prevTasks) => [...prevTasks, createdTask])
+            const createdTask = response.data
 
-        const updatedResponse = await api.get('/tasks')
-        const updatedData = updatedResponse.data
+            setTasks((prevTasks) => [...prevTasks, createdTask])
 
-        setTasks(updatedData.tasks)
+            const updatedResponse = await api.get('/tasks')
+            const updatedData = updatedResponse.data
+
+            setTasks(updatedData.tasks)
+        } catch (error) {
+            console.error('Erro ao criar tarefa:', error)
+        }
     }
 
     async function editTask(
@@ -104,15 +101,10 @@ export function TaskProvider({ children }: TaskProviderProps) {
         }
     }
 
-    useEffect(() => {
-        getTask()
-    }, [])
-
     return (
         <TaskContext.Provider
             value={{
                 tasks,
-
                 createTask,
                 editTask,
                 deleteTask,
