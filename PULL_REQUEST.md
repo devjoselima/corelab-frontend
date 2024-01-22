@@ -17,3 +17,5 @@
 -   Tarefas favoritadas sempre vão ficar no topo.
 -   É possível pesquisar uma nota pelo titulo.
 -   É possível alterar a cor de uma nota.
+
+Video: https://www.youtube.com/watch?v=YA-P5tjx4M8
