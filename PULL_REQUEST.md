@@ -3,7 +3,7 @@
 -   React - biblioteca para spa
 -   Typescript - linguagem de programação
 -   TailwindCSS - estilização de componentes
--   Context API -
+-   Context API - gerenciamento de contextos
 -   Axios - efetuar requisições
 -   Sonner - biblioteca de exibição de toasts
 -   react-icons - biblioteca de icones
